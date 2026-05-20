@@ -1,0 +1,64 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.env
+.env*
+.venv/
+venv/
+ENV/
+env/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.pyre/
+.pytype/
+coverage.xml
+htmlcov/
+.tox/
+.cache/
+
+# Node.js
+node_modules/
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp/
+.pnp.js
+
+# Docker
+docker-compose.override.yml
+Dockerfile.*
+.docker/
+**/tmp/
+**/temp/
+*.log
+
+# Shell scripts / local shell
+*.sh~
+*.swp
+*.swo
+*~
+
+# Editor and OS files
+.DS_Store
+Thumbs.db
+*.iml
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Misc
+.coverage
+.vscode-test/
+
+# exclude environment files
+~.env.example
