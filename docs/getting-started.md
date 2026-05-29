@@ -73,6 +73,7 @@
 1. Change into the backend folder and install dependencies:
    ```sh
    cd backend
+   uv sync
    uv pip install -r requirements.txt
    ```
 2. Run the backend server locally from the `app/` directory:
