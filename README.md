@@ -54,6 +54,8 @@ pnpm install
 pnpm dev
 ```
 
+> Note: frontend local development uses `pnpm`, while the Docker frontend build is intentionally defined using `npm` in `frontend/Dockerfile`.
+
 ### Backend
 
 ```sh

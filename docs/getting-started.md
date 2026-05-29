@@ -61,6 +61,8 @@
    pnpm dev
    ```
 
+> Note: local frontend development uses `pnpm`. The Docker build in `frontend/Dockerfile` still uses `npm`.
+
 ### Backend
 
 #### Requirements

@@ -6,8 +6,9 @@ This repository is a small monorepo with two primary application components and 
 
 - Built with React and Node.js.
 - Lives in the `frontend/` folder.
-- Uses a standard frontend toolchain (`pnpm` or `npm`) for dependency management and local development.
+- Uses a standard frontend toolchain (recommended: `pnpm`) for local development.
 - In production, the frontend is built and served by an Nginx container.
+- The Docker build stage in `frontend/Dockerfile` installs dependencies with `npm`, while local development should use `pnpm`.
 - The frontend exposes a web user interface and sends API requests to the backend via the reverse proxy.
 
 ## Backend
