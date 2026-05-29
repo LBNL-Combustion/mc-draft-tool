@@ -58,7 +58,7 @@
    ```
 3. Run the frontend app locally:
    ```sh
-   pnpm dev
+   pnpm start
    ```
 
 > Note: local frontend development uses `pnpm`. The Docker build in `frontend/Dockerfile` still uses `npm`.

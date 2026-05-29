@@ -44,7 +44,7 @@ This repository is a small monorepo with two primary application components and 
   ```sh
   cd frontend
   pnpm install
-  pnpm dev
+  pnpm start
   ```
 - Backend developers can work in `backend/app/` with:
   ```sh
