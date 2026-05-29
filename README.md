@@ -22,6 +22,52 @@ Unlike legacy programs such as WOODSIM, FLUESIM, and VENT-II, the MC Chimney Dra
 - includes critical environmental factors such as wind effects and elevation,
 - is freely accessible through a public-facing website.
 
+## Repository Architecture
+
+This repository is organized as a monorepo with separate frontend and backend applications plus deployment helpers.
+
+- `frontend/` — React web UI built with Node.js.
+- `backend/` — Python FastAPI service.
+- `deploy/` — Compose configuration and the interactive `deploy/menu.sh` helper.
+- `docs/` — documentation, including setup and architecture guides.
+
+The frontend is served through an Nginx reverse proxy, while the backend exposes a FastAPI REST API on port `8000`.
+
+## Quick Start
+
+From the repository root:
+
+```sh
+git pull
+bash deploy/menu.sh
+```
+
+The interactive deploy helper builds and starts the frontend, backend, and reverse proxy services using Docker Compose.
+
+## Local Development
+
+### Frontend
+
+```sh
+cd frontend
+pnpm install
+pnpm dev
+```
+
+### Backend
+
+```sh
+cd backend/app
+uv run --no-project uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+`pnpm` and `uv` are recommended tools, and both work cross-platform on Linux, macOS, and Windows.
+
+## Notes
+
+- Developers should use a dedicated branch for each area of work.
+- Non-developer users should generally use `bash deploy/menu.sh` from the repo root instead of running services manually.
+
 ## License & Notices
 
 ****************************
