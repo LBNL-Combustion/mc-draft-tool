@@ -62,21 +62,30 @@ check_backend() {
   return 1
 }
 
-check_docker() {
-  if command -v docker >/dev/null 2>&1; then
-    print_success "c. docker installed in PATH: PASS ✅"
+check_nginx_conf() {
+  if [ -f "./nginx/nginx.conf" ]; then
+    print_success "c. nginx config file: PASS ✅"
     return 0
   fi
-  print_error "c. docker installed in PATH: FAIL ❌"
+  print_error "c. nginx config file (./nginx/nginx.conf): FAIL ❌"
+  return 1
+}
+
+check_docker() {
+  if command -v docker >/dev/null 2>&1; then
+    print_success "d. docker installed in PATH: PASS ✅"
+    return 0
+  fi
+  print_error "d. docker installed in PATH: FAIL ❌"
   return 1
 }
 
 check_docker_compose() {
   if docker compose version >/dev/null 2>&1; then
-    print_success "d. docker compose available: PASS ✅"
+    print_success "e. docker compose available: PASS ✅"
     return 0
   fi
-  print_error "d. docker compose available: FAIL ❌"
+  print_error "e. docker compose available: FAIL ❌"
   return 1
 }
 
@@ -85,6 +94,7 @@ run_requirements_checks() {
 
   check_frontend || status=1
   check_backend || status=1
+  check_nginx_conf || status=1
   check_docker || status=1
   check_docker_compose || status=1
 
@@ -98,7 +108,11 @@ run_requirements_checks() {
 }
 
 requirements_ok() {
-  check_frontend >/dev/null 2>&1 && check_backend >/dev/null 2>&1 && check_docker >/dev/null 2>&1 && check_docker_compose >/dev/null 2>&1
+  check_frontend >/dev/null 2>&1 && \
+  check_backend >/dev/null 2>&1 && \
+  check_nginx_conf >/dev/null 2>&1 && \
+  check_docker >/dev/null 2>&1 && \
+  check_docker_compose >/dev/null 2>&1
 }
 
 deploy_service() {
@@ -128,14 +142,47 @@ deploy_service() {
   return 0
 }
 
+deploy_all() {
+  if ! requirements_ok; then
+    print_error "Requirements check failed. Please fix requirements first."
+    return 1
+  fi
+
+  printf "Building all services...\n"
+  if ! docker compose build; then
+    print_error "Failed to build one or more services."
+    print_warning "Check logs with: docker compose logs"
+    return 1
+  fi
+
+  printf "Starting all services...\n"
+  if ! docker compose up -d; then
+    print_error "Failed to start one or more services."
+    print_warning "Check logs with: docker compose logs"
+    return 1
+  fi
+
+  print_success "Successfully deployed all services."
+  return 0
+}
+
+# Always check requirements on startup before entering the menu
+clear
+print_header
+echo "Checking system requirements..."
+echo ""
+run_requirements_checks
+pause
+
 main_menu() {
   while true; do
     clear
     print_header
     cat <<EOF
-1. Check System Requirements
-2. Deploy Frontend
-3. Deploy Backend
+1. (re)deploy frontend
+2. (re)deploy backend
+3. (re)deploy reverse proxy server
+4. deploy frontend + backend + reverse proxy server
 0. Exit
 EOF
     printf "\nSelect an option: "
@@ -145,22 +192,32 @@ EOF
       1)
         clear
         print_header
-        run_requirements_checks
+        if deploy_service frontend; then
+          print_success "Frontend deployment completed successfully."
+        fi
         pause
         ;;
       2)
         clear
         print_header
-        if deploy_service frontend; then
-          print_success "Frontend deployment completed successfully."
+        if deploy_service backend; then
+          print_success "Backend deployment completed successfully."
         fi
         pause
         ;;
       3)
         clear
         print_header
-        if deploy_service backend; then
-          print_success "Backend deployment completed successfully."
+        if deploy_service nginx; then
+          print_success "Reverse proxy deployment completed successfully."
+        fi
+        pause
+        ;;
+      4)
+        clear
+        print_header
+        if deploy_all; then
+          print_success "Full stack deployment completed successfully."
         fi
         pause
         ;;
