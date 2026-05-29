@@ -51,8 +51,10 @@ The interactive deploy helper builds and starts the frontend, backend, and rever
 ```sh
 cd frontend
 pnpm install
-pnpm dev
+pnpm start
 ```
+
+> Note: frontend local development uses `pnpm`, while the Docker frontend build is intentionally defined using `npm` in `frontend/Dockerfile`.
 
 ### Backend
 
